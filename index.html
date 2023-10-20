@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>torret</title>
+    <style>
+        .body2{
+            padding-top: 30px;
+            margin: 0;
+            text-align: center;
+            align-items: center;
+            align-content: center;
+            ruby-align: center;
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(192, 185, 185, 0.74);
+        }
+        
+        .flex_cow{
+
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            margin-top: 30px;
+        }
+        .cimg{
+            width: 300px;
+            height: auto;
+        }
+        input{
+            flex-grow: 1;
+            -webkit-appearance: none;
+            font-size: inherit;
+            padding: 0;
+            outline: 0;
+            border: none;
+            box-sizing: border-box;
+            height: 50px;
+            width: 500px ;
+            background-color: #ffffff;
+            border-radius: 10px 0 0 10px;
+        }
+        button{
+            flex-grow: 1;
+            -webkit-appearance: none;
+            font-size: inherit;
+            padding: 0;
+            outline: 0;
+            border: none;
+            box-sizing: border-box;
+            height: 50px;
+            background-color: #ffffff;
+            border-radius: 0 10px 10px 0 ;
+            width: 10%;
+        }
+    </style>
+</head>
+<body class="body2">
+
+    <div class="flex_cow">
+<!--            <img src="./picture/2.png" alt="手持鲜花的我" style="height: 300px;width: 230px;">-->
+            <img src="./xgirl.jpg" alt="有点害羞的你" style="height: 300px;width: auto">
+    </div>
+
+
+    <div class="flex_cow">
+
+        <input type="text" id="myinput">
+        <button type="submit" id="mybutton">
+            ✈
+        </button>
+
+    </div>
+    <div class="flex_cow" id="imgX">
+
+
+    </div>
+
+    <script>
+        function sendRequest() {
+            var xhr = new XMLHttpRequest();
+            var imgx = document.getElementById('imgX');
+            var url_value = document.getElementById('myinput');
+            var url = 'https://whatslink.info/api/v1/link?url=' + url_value.value;
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    imgx.innerHTML = '';
+                    var response = JSON.stringify(xhr.response);
+
+                    var shots = JSON.parse(response);
+
+                    var regex = /"screenshot":"(.*?)"/g;
+                    var matches = shots.match(regex);
+                    for (let i = 0;i<matches.length;i++){
+                        console.log((JSON.parse("{"+matches[i]+"}")).screenshot)
+                        var pt_url = (JSON.parse("{"+matches[i]+"}")).screenshot
+                        var img = new Image();
+                        imgx.appendChild(img);
+                        img.src = pt_url;
+                        img.className = "cimg"
+                    }
+
+                }
+            };
+            xhr.send();
+        }
+
+
+
+        var button = document.getElementById('mybutton');
+        button.addEventListener('click', sendRequest);
+    </script>
+
+</body>
+</html>
